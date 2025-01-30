@@ -17,3 +17,4 @@ jobs:
           pixi-version: v0.40.2
           cache: true
       - name: run test
+        run: pixi run test
