@@ -18,4 +18,3 @@ jobs:
           cache: true
       - name: run test
         run: pixi run test
-
