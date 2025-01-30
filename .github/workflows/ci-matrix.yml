@@ -1,0 +1,25 @@
+name: "Run CI multi-OS"
+
+on: pull_request
+
+jobs:
+  tests:
+    runs-on: $${ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            CXX: clang++-16
+          - os: ubuntu-latest
+            CXX: g++-12
+    steps:
+      - uses: actions/checkout@v3
+      - uses: prefix-dev/setup-pixi@v0.8.1
+        with:
+          pixi-version: v0.40.2
+          cache: true
+      - name: run test
+        shell: pixi run bash {0}
+        env:
+          CXX: $${matrix.CXX }}
+        run: pixi run test
