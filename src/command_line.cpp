@@ -17,6 +17,20 @@ using namespace xt ::placeholders;
 int main(int argc, char *argv[
 
 ]) {
+
+
+#if __linux__
+    std::cout << "Hello, GNU/Linux!" << '\n';
+#elif _WIN32
+#if defined(_WIN64)
+    std::cout << "Hello, Windows 64-bit!" << '\n';
+#else
+    std::cout << "Hello, Windows!" << '\n';
+#endif
+#else
+    std::cout << "Hello, Other!" << '\n';
+#endif
+    
   std::size_t img_size = 1000;
   std::size_t nb_circles = 1;
   std::size_t nb_samples = 10000;
