@@ -30,7 +30,7 @@ int main(int argc, char *argv[
 #else
     std::cout << "Hello, Other!" << '\n';
 #endif
-    
+
   std::size_t img_size = 1000;
   std::size_t nb_circles = 1;
   std::size_t nb_samples = 10000;
