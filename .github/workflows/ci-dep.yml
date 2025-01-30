@@ -1,4 +1,4 @@
-name: "Run CI"
+name: "Run CI with cppcheck"
 
 on: pull_request
 
