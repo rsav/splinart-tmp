@@ -12,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: install cppcheck
+        run: pix add cppcheck
+
       - name: configure
         shell: pixi run bash {0}
         run: |
