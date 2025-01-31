@@ -1,5 +1,6 @@
 name: "Build and deploy the documentation"
 
+
 on:
   push:
     branches:
