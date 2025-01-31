@@ -19,7 +19,6 @@ int main(int argc,
 
 ])
 {
-
 #if __linux__
     std::cout << "Hello, GNU/Linux!" << '\n';
 #elif _WIN32
@@ -58,7 +57,6 @@ int main(int argc,
         {
             xt::view(circles[i].color, xt::range(_, 3)) = xt::view(rand_colors, i);
         }
-
     }
     auto img = splinart::build_img({img_size, img_size}, circles, nb_samples);
     splinart ::imshow(img);
