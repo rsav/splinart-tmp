@@ -1,0 +1,49 @@
+name: "long check"
+
+on:
+  pull_request:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  check_new_commit:
+    runs-on: ubuntu-latest
+    outputs:
+      # récupérer la valeur nb_commits pour pouvoir l’utiliser pour déclencher le travail sur clang-tidy.
+      nb_commits: ${{ steps.new_commits.outputs.nb_commits }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - id: new_commits
+        # calcul du nb de commits depuis 24h à partir du moment où l’action est exécutée
+        run: echo "nb_commits=$(git log --oneline --since '24 hours ago' | wc -l)" >> $GITHUB_OUTPUT
+
+  # Mise en place du linter
+  clang-tidy-check:
+    needs: check_new_commit
+    # se déclenche uniquement si le nombre de commits est strictement positif en utilisant needs, if et la variable nb_commits
+    if: needs.check_new_commit.outputs.nb_commits > 0
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: prefix-dev/setup-pixi@v0.8.1
+        with:
+          pixi-version: v0.40.2
+          cache: true
+
+      - name: clang-tidy and pip installation
+        run: pixi add clang-tools pip
+
+      - name: ccompdb installation
+        shell: pixi run bash {0}
+        run: pip install compdb
+
+      - name: Configure
+        shell: pixi run bash {0}
+        run: |
+          cmake . -Bbuild -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug -DBUILD_DEMOS=ON
+          compdb -p build list > compile_commands.json
+
+      - name: run clang-tidy on splinart-cpp
+        run: pixi run run-clang-tidy
